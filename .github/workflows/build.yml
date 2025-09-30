@@ -23,7 +23,7 @@ jobs:
     - name: Install Ant
       run: sudo apt-get update && sudo apt-get install -y ant unzip wget
 
-    - name: Install Android SDK (legacy with Ant tasks)
+    - name: Install Android SDK (legacy)
       run: |
         wget https://dl.google.com/android/repository/tools_r25.2.5-linux.zip -O sdk-tools.zip
         unzip -q sdk-tools.zip -d $HOME/android-sdk
@@ -31,12 +31,14 @@ jobs:
         echo "sdk.dir=$ANDROID_HOME" > ant.properties
         echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
         echo "$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
-        ls -R $ANDROID_HOME/tools/ant
+
+        # instalar plataforma Android 16 (puedes ajustar según tu project.properties)
+        yes | $ANDROID_HOME/tools/android update sdk --no-ui --all --filter android-16
 
     - name: Build APK with Ant
       run: |
         export ANDROID_HOME=$HOME/android-sdk
-        ant -Djava.awt.headless=true -lib $ANDROID_HOME/tools/lib -lib $ANDROID_HOME/tools/ant debug
+        ant -Djava.awt.headless=true debug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4

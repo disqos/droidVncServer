@@ -28,9 +28,11 @@ jobs:
         wget https://dl.google.com/android/repository/tools_r25.2.5-linux.zip -O sdk-tools.zip
         unzip -q sdk-tools.zip -d $HOME/android-sdk
         export ANDROID_HOME=$HOME/android-sdk
-        export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
-        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "sdk.dir=$ANDROID_HOME" > ant.properties
+        echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
         echo "$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
+        ls $ANDROID_HOME/tools/ant
+
 
     - name: Build APK with Ant
       run: |

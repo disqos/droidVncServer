@@ -10,42 +10,46 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:padding="24dp">
 
+        <!-- Logo -->
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:src="@drawable/droidvnclogo" />
+            android:src="@drawable/droidvnclogo"
+            android:contentDescription="@string/app_name" />
 
-        <!-- Botón grande de Start -->
+        <!-- Botón Start -->
         <Button
             android:id="@+id/startButton"
             android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
+            android:text="@string/start_vnc"
             android:background="@drawable/btnstart"
-            android:text="Start" />
+            android:layout_marginBottom="16dp" />
 
-        <!-- Botón pequeño de Stop -->
+        <!-- Botón Stop -->
         <Button
             android:id="@+id/stopButton"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:text="@string/stop_vnc"
             android:background="@drawable/btnstop_normal"
-            android:text="Stop" />
+            android:layout_marginBottom="24dp" />
 
         <!-- Texto de estado -->
         <TextView
             android:id="@+id/statusText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:text="VNC Server detenido"
+            android:text="@string/status_stopped"
             android:textSize="18sp"
             android:textStyle="bold"
             android:shadowColor="#111"
             android:shadowDy="1.0"
-            android:shadowRadius="0.5" />
+            android:shadowRadius="0.5"
+            android:paddingTop="10dp"/>
     </LinearLayout>
 </RelativeLayout>

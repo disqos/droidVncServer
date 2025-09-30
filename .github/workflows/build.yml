@@ -17,23 +17,23 @@ jobs:
       - name: Set up JDK 8
         uses: actions/setup-java@v4
         with:
-          java-version: 8
-          distribution: temurin
+          distribution: 'temurin'
+          java-version: '8'
 
       - name: Install Ant
-        run: sudo apt-get install -y ant
+        run: sudo apt-get update && sudo apt-get install -y ant
 
       - name: Install Android SDK (legacy)
         run: |
           wget https://dl.google.com/android/repository/tools_r25.2.5-linux.zip -O sdk-tools.zip
           unzip -q sdk-tools.zip -d $HOME/android-sdk
           export ANDROID_HOME=$HOME/android-sdk
-          echo "sdk.dir=$ANDROID_HOME" > ant.properties
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
           echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
           echo "$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
 
-          # instalar Google APIs nivel 15
-          yes | $ANDROID_HOME/tools/android update sdk --no-ui --all --filter "addon-google_apis-google-15"
+          # instalar plataforma Android 15 y Google APIs
+          yes | $ANDROID_HOME/tools/android update sdk --no-ui --all --filter "android-15,addon-google_apis-google-15"
 
       - name: Build APK with Ant
         run: |

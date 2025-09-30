@@ -11,38 +11,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Set up JDK 8
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '8'
+    - name: Set up JDK 8
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 8
 
-      - name: Install Ant
-        run: sudo apt-get install -y ant
+    - name: Install Ant
+      run: sudo apt-get update && sudo apt-get install -y ant
 
-      - name: Install Android SDK Tools (legacy)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip
-          wget https://dl.google.com/android/repository/tools_r25.2.5-linux.zip -O sdk-tools.zip
-          mkdir -p $HOME/android-sdk
-          unzip sdk-tools.zip -d $HOME/android-sdk
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
-          # Instalamos platform y build-tools que necesita este proyecto
-          yes | $HOME/android-sdk/tools/android update sdk --no-ui --all --filter platform-tools,android-19,build-tools-25.0.3
+    - name: Install Android SDK (legacy with Ant tasks)
+      run: |
+        wget https://dl.google.com/android/repository/tools_r25.2.5-linux.zip -O sdk-tools.zip
+        unzip -q sdk-tools.zip -d $HOME/android-sdk
+        export ANDROID_HOME=$HOME/android-sdk
+        export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
+        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
 
-      - name: Build APK
-        run: |
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
-          ant debug
+    - name: Build APK with Ant
+      run: |
+        export ANDROID_HOME=$HOME/android-sdk
+        ant debug
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: DroidVNC-APK
-          path: bin/*.apk
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: DroidVNC-APK
+        path: bin/*.apk

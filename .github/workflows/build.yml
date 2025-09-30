@@ -21,23 +21,20 @@ jobs:
           java-version: 8
 
       - name: Install Ant
-        run: sudo apt-get update && sudo apt-get install -y ant
+        run: sudo apt-get install -y ant
 
-      - name: Install Android SDK (legacy with Ant tasks)
+      - name: Install Android SDK (legacy)
         run: |
           wget https://dl.google.com/android/repository/tools_r25.2.5-linux.zip -O sdk-tools.zip
-          unzip -q sdk-tools.zip -d $HOME/android-sdk
+          unzip sdk-tools.zip -d $HOME/android-sdk
+          yes | $HOME/android-sdk/tools/android update sdk --no-ui --all --filter build-tools-25.0.3,android-15,platform-tools
+
+      - name: Fix Ant tasks
+        run: |
           export ANDROID_HOME=$HOME/android-sdk
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
-          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
-          echo "$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
-
-          # instalar paquetes mínimos
-          yes | $ANDROID_HOME/tools/android update sdk --no-ui --all --filter "platform-tools,tools,build-tools-19.1.0,android-15,addon-google_apis-google-15"
-
-          # ⚡ FIX: añadir ant-tasks.jar al classpath de Ant
           mkdir -p $HOME/.ant/lib
           cp $ANDROID_HOME/tools/lib/ant-tasks.jar $HOME/.ant/lib/
+          cp $ANDROID_HOME/tools/lib/sdklib.jar $HOME/.ant/lib/
 
       - name: Build APK with Ant
         run: |
